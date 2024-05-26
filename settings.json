@@ -1,0 +1,52 @@
+{
+    "tel aviv": {
+        "lon": 34.8,
+        "lat": 32.0833,
+        "type": 1,
+        "id": 6845,
+        "country": "IL",
+        "sunrise": 1716691047,
+        "sunset": 1716741518,
+        "timezone": 10800
+    },
+    "madrid": {
+        "lon": -3.7026,
+        "lat": 40.4165,
+        "type": 2,
+        "id": 2007545,
+        "country": "ES",
+        "sunrise": 1716698995,
+        "sunset": 1716752052,
+        "timezone": 7200
+    },
+    "tokyo": {
+        "lon": 139.6917,
+        "lat": 35.6895,
+        "type": 2,
+        "id": 2001249,
+        "country": "JP",
+        "sunrise": 1716751734,
+        "sunset": 1716803293,
+        "timezone": 32400
+    },
+    "barcelona": {
+        "lon": 2.159,
+        "lat": 41.3888,
+        "type": 2,
+        "id": 18549,
+        "country": "ES",
+        "sunrise": 1716697415,
+        "sunset": 1716750818,
+        "timezone": 7200
+    },
+    "paris": {
+        "lon": 2.3488,
+        "lat": 48.8534,
+        "type": 2,
+        "id": 2012208,
+        "country": "FR",
+        "sunrise": 1716695781,
+        "sunset": 1716752361,
+        "timezone": 7200
+    }
+}
