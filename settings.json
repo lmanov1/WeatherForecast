@@ -1,13 +1,13 @@
 {
-    "tel aviv": {
-        "lon": 34.8,
-        "lat": 32.0833,
-        "type": 1,
-        "id": 6845,
-        "country": "IL",
-        "sunrise": 1716691047,
-        "sunset": 1716741518,
-        "timezone": 10800
+    "tehran": {
+        "lon": 51.4215,
+        "lat": 35.6944,
+        "type": 2,
+        "id": 47737,
+        "country": "IR",
+        "sunrise": 1716686540,
+        "sunset": 1716738046,
+        "timezone": 12600
     },
     "madrid": {
         "lon": -3.7026,
@@ -19,15 +19,15 @@
         "sunset": 1716752052,
         "timezone": 7200
     },
-    "tokyo": {
-        "lon": 139.6917,
-        "lat": 35.6895,
+    "london": {
+        "lon": -0.1257,
+        "lat": 51.5085,
         "type": 2,
-        "id": 2001249,
-        "country": "JP",
-        "sunrise": 1716751734,
-        "sunset": 1716803293,
-        "timezone": 32400
+        "id": 2075535,
+        "country": "GB",
+        "sunrise": 1716695661,
+        "sunset": 1716753669,
+        "timezone": 3600
     },
     "barcelona": {
         "lon": 2.159,
@@ -39,14 +39,34 @@
         "sunset": 1716750818,
         "timezone": 7200
     },
-    "paris": {
-        "lon": 2.3488,
-        "lat": 48.8534,
+    "rome": {
+        "lon": -85.1647,
+        "lat": 34.257,
+        "type": 1,
+        "id": 5680,
+        "country": "US",
+        "sunrise": 1716719523,
+        "sunset": 1716770629,
+        "timezone": -14400
+    },
+    "tel aviv": {
+        "lon": 34.8,
+        "lat": 32.0833,
+        "type": 1,
+        "id": 6845,
+        "country": "IL",
+        "sunrise": 1716691047,
+        "sunset": 1716741518,
+        "timezone": 10800
+    },
+    "palo alto": {
+        "lon": -122.143,
+        "lat": 37.4419,
         "type": 2,
-        "id": 2012208,
-        "country": "FR",
-        "sunrise": 1716695781,
-        "sunset": 1716752361,
-        "timezone": 7200
+        "id": 2018441,
+        "country": "US",
+        "sunrise": 1716727909,
+        "sunset": 1716779994,
+        "timezone": -25200
     }
 }
