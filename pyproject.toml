@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "weatherforecast"
+version = "0.1.0"
+description = "This is a Python project that provides a weather forecast for a given location(s) using the OpenWeatherMap API."
+authors = ["Lidi Manov <peru12003@gmail.com>"]
+license = "LICENSE"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pytz = "^2024.1"
+requests = "^2.32.3"
+streamlit = "^1.35.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
