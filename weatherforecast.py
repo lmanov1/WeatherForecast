@@ -88,11 +88,18 @@ def my_api_key():
     Returns:
         str: The API key.
     """
-    key_file = Path("./.security.json")
+    import sys
+    if sys.version_info >= (3, 11):
+        import tomllib
+        #print("ython 3.11 or later detected, using tomllib")
+    else:
+        import tomli as tomllib
+
+    key_file = Path("./.streamlit/secrets.toml")
     if key_file.exists() and key_file.is_file() and key_file.stat().st_size > 0:
-        with open('./.security.json', 'r') as f:
-            data = json.load(f)                 
-            return data['api_key']
+        with open("./.streamlit/secrets.toml", "rb") as f:
+            toml_dict = tomllib.load(f)                     
+            return toml_dict['openweathermap_api_key']
     else:        
         return input("Please enter your OpenWeatherMap API key: ")
 

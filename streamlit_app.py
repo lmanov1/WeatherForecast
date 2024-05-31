@@ -48,7 +48,7 @@ def weather_at_city():
         if len(st.session_state.city_name) == 0:                
             st.write("Please enter a valid city name")                
         else:
-            st_print_location(st.session_state.city_name, my_api_key())                       
+            st_print_location(st.session_state.city_name, st_api_key())                       
 
 
 def get_and_process_city_name():
@@ -60,6 +60,16 @@ def get_and_process_city_name():
             on_change= weather_at_city(), key='city_name')
     
 
+def st_api_key():
+    """
+    Reads the API key from the streamlite's secrets store and returns it.
+    Returns:
+        str: The API key.
+    """
+    if "openweathermap_api_key" in st.secrets:
+        return st.secrets["openweathermap_api_key"]
+    else:
+        return st.text_input("Please enter your OpenWeatherMap API key: ")    
 ##############################################################################
        
 def main():
@@ -68,7 +78,7 @@ def main():
     
     st.write("Weather at your stored locations")
     for location in locations:
-        st_print_location(location , my_api_key())
+        st_print_location(location , st_api_key())
 
     get_and_process_city_name()    
 

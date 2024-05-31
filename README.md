@@ -13,12 +13,13 @@ Once you have Python installed, you can clone this repository to your local mach
 
 ```bash
 git clone git@github.com:lmanov1/WeatherForecast.git
+cd WeatherForecast
 ```
 You can now run the command below and follow interactive choices provided by application
 
 ```bash
-pip install -r requirements.txt
-python3 main.py -- TBD
+poetry shell
+python3 main.py
 ```
 
 ## Running the Notebook
@@ -39,7 +40,7 @@ jupyter notebook
 ```
 This will start the Jupyter Notebook server and open your default web browser. You can then navigate to the WeatherForecast.ipynb file in the Jupyter Notebook interface and open it.
 
-## Run notebook online 
+### Run notebook online 
 Other option will be to open the notebook in Google colaboratory or alike enviromenment and run from there.
 You can do it by typing in your browser the follow URL:
 https://githubtocolab.com/lmanov1/WeatherForecast/blob/main/WeatherForecast.ipynb
@@ -47,9 +48,13 @@ https://githubtocolab.com/lmanov1/WeatherForecast/blob/main/WeatherForecast.ipyn
 Once page was opened  , choose 'Connect'(to the Google compute backend engine) , and then 'Run all' from the 'Run' menu.
 Choose 'Run anyway' if warned about running a notebook which is not being authored by Google.
 
-
-## A few words about running notebooks
+### A few words about running notebooks
 To run the code in the notebook, you can either click on the 'Run' button at the top of the interface or use the shortcut 'Shift + Enter'. This will run the code in the currently selected cell and then select the next cell. You can run all cells in the notebook by clicking on 'Cell' -> 'Run All' in the menu.
+
+
+## Run streamlit application from share.streamlit.io
+https://weatherforecast-khftt8pnxtbzbd9smuuwpw.streamlit.app/
+
 
 # Application logics and UI
 As you run application for the first time , you will be required to enter a weather location (city name) to monitor.
