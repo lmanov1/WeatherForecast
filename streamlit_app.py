@@ -4,16 +4,15 @@ import streamlit as st
 import pandas as pd
 
 def st_print_location(location,api_key):
-    weather_str = print_city_weather(location, api_key)    
-    weather_data = weather_str.split("\n")
-    #print(weather_data)
-    if len(weather_data) == 1:
-        st.write(f"No weather data found for {location}")
-        st.write( weather_data)
-        return
-    # Create a DataFrame from the weather data  ,   weather_data[1:] as an index   
-    df = pd.DataFrame(weather_data[1:], columns=[weather_data[0]])  
+    weather = print_city_weather(location, api_key)    
     
+    if len(weather) == 1:
+        st.write(f"No weather data found for {location}")
+        st.write( weather)
+        return
+    # Create a DataFrame from the weather data  ,   location value as an index   
+    df = pd.DataFrame(weather.items(), columns=[location.capitalize(), '']) 
+        
     # CSS to inject contained in a string    
     hide_table_row_index = """
                 <style>
@@ -23,21 +22,8 @@ def st_print_location(location,api_key):
                 """
     # Inject CSS with Markdown
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
-   
     # Display a static table
-    st.table(df)
-
-
-def st_print_weather_with_units(weather_dict, units_dict, 
-                             remote_utc_timestamp = None, 
-                             datetime_print_format="%A, %B %d, %Y, %I:%M %p", 
-                             remote_tz_shift_secs = None):
-    
-    answer = print_weather_with_units(weather_dict, units_dict, 
-                             remote_utc_timestamp, 
-                             datetime_print_format, 
-                             remote_tz_shift_secs)    
-    st.write(answer)    
+    st.table(df) 
 
 def weather_at_city():    
     if st.session_state.city_name.lower() == "exit" or st.session_state.city_name.lower() == "quit":

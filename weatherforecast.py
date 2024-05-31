@@ -5,7 +5,7 @@ from datetime import datetime
 import pytz
 
 ############################### Global definitions ####################################
-#exclude_list = ["icon", "id"]
+exclude_list = ["icon", "id"]
 global_settings = {"units":"metric"} # later take from settings !!!!
 locations = {}
 
@@ -17,22 +17,22 @@ location_settings = {
 
 # TBD: display icon from url : https://openweathermap.org/img/wn/{icon}}@2x.png
 # TBD : display timestamp , timezone , sunrise and sunset in human readable format
-# TBD: weather_api  should be used to filter printed details on weather information
-weather_api = ["weather", "main", "visibility", "wind", "clouds", "rain", "snow"] 
+weather_api = ["weather", "main" 
+               #"visibility" , "wind", "clouds", "rain", "snow"
+              ] 
 
-weather_api_units = { "main": 
-                        {
-                            "temp": "°C", 
-                            "feels_like": "°C", 
-                            "temp_min": "°C", 
-                            "temp_max": "°C", 
-                            "pressure": "hPa", 
-                            "humidity": "%"
-                        },                      
-                     "visibility": "meters", 
-                     "wind": {"speed": "m/s" , "deg": "°" , "gust":"m/s" }, 
-                     "rain": {"1h": "mm"}, 
-                     "snow": {"1h": "mm"}
+weather_api_units = { 
+                        "temp": "°C", 
+                        "feels_like": "°C", 
+                        "temp_min": "°C", 
+                        "temp_max": "°C", 
+                        "pressure": "hPa", 
+                        "humidity": "%",                      
+                        "visibility": "meters", 
+                        "speed": "m/s" ,
+                        "deg": "°" ,
+                        "gust":"m/s" ,
+                        "1h": "mm"                        
                      }
 weather = {}
 
@@ -113,57 +113,22 @@ def print_city_weather(city_name, api_key, print_in_place=False):
         print_in_place (bool, optional): Whether to print the weather information in place. Defaults to False.
 
     Returns:
-        str: The weather information for the city.
+        weather: The dictionary with weather information for the city.
 
-    """
-    answer = ""     
-    status, weather, remote_utc_timestamp, remote_tz_shift_secs = weather_checker(city_name, api_key)    
-    if status:
-        answer += f"=========== Weather in {city_name.title()} ================\n"
-        answer += print_weather_with_units(weather, weather_api_units, remote_utc_timestamp=remote_utc_timestamp, remote_tz_shift_secs=remote_tz_shift_secs) 
-    else:
-        answer += f"Error retrieving current weather in {city_name}. Please be sure this is valid location name or try again later."        
+    """    
+    status, weather = weather_checker(city_name, api_key)   
+    if status != True:
+        weather = {}       
+        weather[f"Error retrieving current weather in {city_name}"] = f"Please be sure this is valid location name or try again later."            
 
-    if print_in_place:  
-        print(answer)
+    if print_in_place:
+        print(f"\nCurrent weather in {city_name.capitalize()}")
+        for key, value in weather.items():
+            print(f"{key}: {value}")
+        print("\n")    
 
-    return answer
+    return weather
 
-
-def print_weather_with_units(weather_dict, units_dict, 
-                             remote_utc_timestamp=None, 
-                             datetime_print_format="%A, %B %d, %Y, %I:%M %p", 
-                             remote_tz_shift_secs=None):
-    """
-    Prints the weather information with units.
-
-    Args:
-        weather_dict (dict): A dictionary containing the weather information.
-        units_dict (dict): A dictionary containing the units for each weather parameter.
-        remote_utc_timestamp (int, optional): The remote UTC timestamp. Defaults to None.
-        datetime_print_format (str, optional): The format for printing the datetime. Defaults to "%A, %B %d, %Y, %I:%M %p".
-        remote_tz_shift_secs (int, optional): The shift in seconds for the remote timezone. Defaults to None.
-
-    Returns:
-        str: The formatted weather information with relevant units.
-    """
-    
-    answer = ""
-    if remote_utc_timestamp is not None:
-        # TBD : use pytz to get timezone name and use it to convert timestamp to local time
-        dt_at_dest = datetime.fromtimestamp(remote_utc_timestamp)
-        answer += f"Local time at destination: {dt_at_dest.strftime(datetime_print_format)}\n"
-        answer += f"Timezone at destination: UTC+{(remote_tz_shift_secs/(60*60))}\n"
-        
-    for key, value in weather_dict.items():
-        if isinstance(value, dict):
-            answer += f"{key}:"
-            answer += print_weather_with_units(value, units_dict.get(key, {}))
-        else:
-            unit = units_dict.get(key, "")
-            answer += f"{key}: {value} {unit}\n"            
-            
-    return answer
 
 def parse_openweather_response(json_str):
     
@@ -182,10 +147,29 @@ def parse_openweather_response(json_str):
         
         for weather_key in weather_api:
             if weather_key  == key:
-                if isinstance(value, list):                                                                    
-                    weather[weather_key] = value[0] # only first weather report
+                if isinstance(value, list):                    
+                    # only first weather report
+                    weather_report0 = value[0]
+                    for item in weather_report0.keys():
+                        if item not in exclude_list:                             
+                            if item in weather_api_units.keys():                               
+                                weather[item] = f"{weather_report0[item]} {weather_api_units.get(item)}"
+                            else:                             
+                                weather[item] = weather_report0[item]
+                    
+                elif isinstance(value, dict):
+                    for item in value.keys():
+                        if item not in exclude_list:
+                            if item in weather_api_units.keys():                           
+                                weather[item] = f"{value[item]} {weather_api_units.get(item)}"
+                            else:
+                                weather[item] = value[item]
                 else:
-                    weather[weather_key] = value            
+                    if weather_key not in exclude_list:  
+                        if weather_key in weather_api_units.keys():                                                    
+                            weather[weather_key] = f"{value}  {weather_api_units.get(weather_key)}"
+                        else:                            
+                            weather[weather_key] = value
 
         for location_key , location_value in location_settings.items()  :
             if location_key == key:                      
@@ -194,12 +178,16 @@ def parse_openweather_response(json_str):
                         locations[city.lower()][str(key)] = value
                     else:                        
                         locations[city.lower()][item] = value[item]
-       
-    return weather , data["dt"] , data["timezone"]    
+   
+        if data["dt"] is not None and data["timezone"] is not None:            
+            dt_at_dest_str = datetime.fromtimestamp(data["dt"]+data["timezone"]).strftime("%A, %B %d, %Y, %I:%M %p")       
+            remote_tz = data["timezone"]/(60*60)
+            weather["Time at destination"] = f"{dt_at_dest_str} UTC+{remote_tz}"            
+        
+    return weather 
 
 
 def weather_checker(city_name , api_key):        
-
     '''
         The function `weather_checker(city_name)` is responsible for checking the weather information for a given city. 
         It takes a `city_name` parameter as input and uses the OpenWeatherMap API to retrieve the weather data for that city.
@@ -215,10 +203,8 @@ def weather_checker(city_name , api_key):
     data = response.json()    
     if data["cod"] != 200:
         print("Error: ", data["message"])
-        return False  , None , None , None
+        return False  , None
     
     store_locations()
-    
-    weather , remote_utc_timestamp , remote_tz_shift_secs = parse_openweather_response(response.text)
-    
-    return True , weather , remote_utc_timestamp , remote_tz_shift_secs
+    weather  = parse_openweather_response(response.text)    
+    return True , weather     
