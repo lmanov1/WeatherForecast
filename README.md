@@ -53,8 +53,7 @@ To run the code in the notebook, you can either click on the 'Run' button at the
 
 
 ## Run streamlit application from share.streamlit.io
-https://weatherforecast-khftt8pnxtbzbd9smuuwpw.streamlit.app/
-
+https://weatherforecast-axhfocads2nic84dwvjpyi.streamlit.app/
 
 # Application logics and UI
 As you run application for the first time , you will be required to enter a weather location (city name) to monitor.
