@@ -16,7 +16,8 @@ The location you enter is stored as your preference for future use. The next tim
 
 ## Live Demo
 
-You can access a live demo of the application at the following URL: https://weatherforecast-axhfocads2nic84dwvjpyi.streamlit.app/
+You can access a live demo of the application at the following URL:
+https://weatherforecast-xzsurgh5ryfbtlskwejvkc.streamlit.app/
 
 You can  otherwise , clone repo locally and run main.py script.
 Please pay attention, poetry installation required in order to run project' virtual environment
