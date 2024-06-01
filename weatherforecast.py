@@ -117,6 +117,14 @@ def read_timezone():
         timezone = "UTC"
     return timezone
 
+def print_time_for_stored_timezone(print_in_place=False):   
+    datetime_sel_tz = datetime.now(pytz.timezone(read_timezone())) 
+
+    local_time= datetime_sel_tz.strftime('%A, %B %d, %Y, %I:%M %p %Z %z')
+    if print_in_place:
+        print(local_time)   
+    return f"{local_time}"
+
 ############################### API keys ####################################
 def my_api_key():
     """

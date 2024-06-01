@@ -1,26 +1,20 @@
 {
-    "tel aviv": {
-        "lon": 34.8,
-        "lat": 32.0833,
-        "country": "IL",
+    "arkansas": {
+        "lon": -92.5004,
+        "lat": 34.7504,
+        "country": "US",
+        "timezone": -18000
+    },
+    "vilnius": {
+        "lon": 25.2798,
+        "lat": 54.6892,
+        "country": "LT",
         "timezone": 10800
     },
-    "london": {
-        "lon": -0.1257,
-        "lat": 51.5085,
-        "country": "GB",
-        "timezone": 3600
-    },
-    "barcelona": {
-        "lon": 2.159,
-        "lat": 41.3888,
-        "country": "ES",
-        "timezone": 7200
-    },
-    "paris": {
-        "lon": 2.3488,
-        "lat": 48.8534,
-        "country": "FR",
-        "timezone": 7200
+    "hod hasharon": {
+        "lon": 34.8883,
+        "lat": 32.1508,
+        "country": "IL",
+        "timezone": 10800
     }
 }

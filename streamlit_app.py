@@ -62,9 +62,9 @@ def st_api_key():
         return st.text_input("Please enter your OpenWeatherMap API key: ")
 
 ##### Settings  ####
-  
 
-def checkbox_container(data):    
+
+def checkbox_container(data):
     new_data = st.text_input('Enter new location to store')
     cols = st.columns(4)
     if cols[0].button('Add location'):
@@ -73,60 +73,51 @@ def checkbox_container(data):
         store_locations()
     if cols[1].button('Select All'):
         for i in data:
-            st.session_state['dynamic_checkbox_' + i] = True        
+            st.session_state['dynamic_checkbox_' + i] = True
     if cols[2].button('UnSelect All'):
         for i in data:
-            st.session_state['dynamic_checkbox_' + i] = False        
+            st.session_state['dynamic_checkbox_' + i] = False
     if cols[3].button('Remove Selected'):
         for i in data:
-            if st.session_state['dynamic_checkbox_' + i] == True:                
+            if st.session_state['dynamic_checkbox_' + i] == True:
                 if i.lower() in locations.keys():
                     locations.pop(i.lower())
                     store_locations()
-                    data.remove(i)                    
+                    data.remove(i)
                 else:
                     st.write(f"Location {i} not found in stored locations")
-                
     for i in data:
         st.checkbox(i, key='dynamic_checkbox_' + i)
 
 def get_selected_checkboxes():
     return [i.replace('dynamic_checkbox_','') for i in st.session_state.keys() if i.startswith('dynamic_checkbox_') and st.session_state[i]]
 
-
-    
 def manage_locations():
-    locations = read_locations()  
-    
-    if 'locations_data' not in st.session_state.keys():   
+    locations = read_locations()
+
+    if 'locations_data' not in st.session_state.keys():
         locations_data = [ location.capitalize() for location in locations.keys()]
         st.session_state['locations_data'] = locations_data
     else:
-        locations_data = st.session_state['locations_data']    
+        locations_data = st.session_state['locations_data']
 
     checkbox_container(locations_data)
     #st.write('You selected:')
-    #st.write(get_selected_checkboxes())       
-
+    #st.write(get_selected_checkboxes())
 
 def save_timezone():
     st.write("Enter your local timezone")
     timezone_options = pytz.all_timezones
     selected_timezone = st.selectbox("Select your timezone", timezone_options)
-    st.write(f"Selected timezone: {selected_timezone}")
-    store_timezone(selected_timezone)    
-    # Get the selected timezone
-    # selected_timezone = read_timezone()
-    # # Get the current UTC time
-    # datetime.now(pytz.timezone('timezone name'))
-    # st.write(f"Local time: {datetime.now(pytz.timezone('timezone name'))}")
+    store_timezone(selected_timezone)
+    st.write(f"Local time: {print_time_for_stored_timezone()}")
 
-    
+
 
 configuration_options = ["Manage stored locations", "Change API key", "Enter your preferred metrics", "Enter your local timezone"]
 def process_selection():
-
-    if st.session_state.selected_option == "Manage stored locations":        
+    
+    if st.session_state.selected_option == "Manage stored locations":
         manage_locations()
     elif st.session_state.selected_option == "Change API key":
         st.write("Change API key")
@@ -142,8 +133,9 @@ def process_settings():
     if "selected_option" not in st.session_state :
         st.session_state.selected_option = configuration_options[0]
 
+    hor_line = '⎯'*30
     st.selectbox(
-        "Select one of the follows options",
+        f'{hor_line} **Select one of the following** {hor_line}',
         configuration_options,
         key='selected_option', on_change= process_selection() ,
         #index=0,
@@ -158,9 +150,12 @@ def main():
     locations = read_locations()
 
     with st.sidebar:
+        st.image("./Sun_Wave_Logo_T.png",width=150)
+        st.text(print_time_for_stored_timezone())
+
         selected = option_menu(
-            menu_title="",
-            options=["Enter a city name", "Show weather at stored locations", "Settings", "Exit"],
+            menu_title=f"",
+            options=["Enter a city name", "History", "Settings", "Exit"],
             default_index=0,
             orientation="vertical",
              styles={
@@ -173,7 +168,7 @@ def main():
 
     if selected == "Enter a city name":
         get_and_process_city_name()
-    elif selected == "Show weather at stored locations":
+    elif selected == "History":
         st.write("Weather at your stored locations")
         for location in locations:
             st_print_location(location , st_api_key())

@@ -2,6 +2,7 @@ from weatherforecast import *
 
 api_key = my_api_key()
 locations = read_locations()
+print_time_for_stored_timezone( print_in_place=True )
 print(f"Checking weather for stored locations:")
 for location in locations:
    print_city_weather(location, api_key, print_in_place=True)
