@@ -1,72 +1,26 @@
 {
-    "madrid": {
-        "lon": -3.7026,
-        "lat": 40.4165,
-        "type": 2,
-        "id": 2007545,
-        "country": "ES",
-        "sunrise": 1716698995,
-        "sunset": 1716752052,
-        "timezone": 7200
+    "tel aviv": {
+        "lon": 34.8,
+        "lat": 32.0833,
+        "country": "IL",
+        "timezone": 10800
     },
     "london": {
         "lon": -0.1257,
         "lat": 51.5085,
-        "type": 2,
-        "id": 2075535,
         "country": "GB",
-        "sunrise": 1716695661,
-        "sunset": 1716753669,
         "timezone": 3600
     },
     "barcelona": {
         "lon": 2.159,
         "lat": 41.3888,
-        "type": 2,
-        "id": 18549,
         "country": "ES",
-        "sunrise": 1716697415,
-        "sunset": 1716750818,
         "timezone": 7200
     },
-    "rome": {
-        "lon": -85.1647,
-        "lat": 34.257,
-        "type": 2,
-        "id": 2009645,
-        "country": "US",
-        "sunrise": 1716719523,
-        "sunset": 1716770629,
-        "timezone": -14400
-    },
-    "tel aviv": {
-        "lon": 34.8,
-        "lat": 32.0833,
-        "type": 1,
-        "id": 6845,
-        "country": "IL",
-        "sunrise": 1716691047,
-        "sunset": 1716741518,
-        "timezone": 10800
-    },
-    "palo alto": {
-        "lon": -122.143,
-        "lat": 37.4419,
-        "type": 2,
-        "id": 2018441,
-        "country": "US",
-        "sunrise": 1716727909,
-        "sunset": 1716779994,
-        "timezone": -25200
-    },
-    "detroit": {
-        "lon": -83.0458,
-        "lat": 42.3314,
-        "type": 2,
-        "id": 2006979,
-        "country": "US",
-        "sunrise": 1716717680,
-        "sunset": 1716771455,
-        "timezone": -14400
+    "paris": {
+        "lon": 2.3488,
+        "lat": 48.8534,
+        "country": "FR",
+        "timezone": 7200
     }
 }

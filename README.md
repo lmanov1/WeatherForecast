@@ -18,7 +18,7 @@ The location you enter is stored as your preference for future use. The next tim
 
 You can access a live demo of the application at the following URL: https://weatherforecast-axhfocads2nic84dwvjpyi.streamlit.app/
 
-Or clone repo locally and run main.py
+You can  otherwise , clone repo locally and run main.py script.
 Please pay attention, poetry installation required in order to run project' virtual environment
 ```bash
     git clone git@github.com:lmanov1/WeatherForecast.git

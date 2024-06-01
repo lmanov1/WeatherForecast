@@ -19,7 +19,7 @@ if answer.lower() == "yes" or answer.lower() == "y":
                 print("Please enter a valid city name")
                 continue
             else:
-                print_city_weather(city, api_key, print_in_place=True)
+                print_city_weather(city, api_key, print_in_place=True)                
                 continue
 else:
     store_locations()
