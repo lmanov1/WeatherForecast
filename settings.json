@@ -1,20 +1,26 @@
 {
-    "arkansas": {
-        "lon": -92.5004,
-        "lat": 34.7504,
-        "country": "US",
+    "london": {
+        "lon": -0.1257,
+        "lat": 51.5085,
+        "country": "GB",
+        "timezone": 3600
+    },
+    "panama": {
+        "lon": -80,
+        "lat": 9,
+        "country": "PA",
         "timezone": -18000
     },
-    "vilnius": {
-        "lon": 25.2798,
-        "lat": 54.6892,
-        "country": "LT",
-        "timezone": 10800
+    "paris": {
+        "lon": 2.3488,
+        "lat": 48.8534,
+        "country": "FR",
+        "timezone": 7200
     },
-    "hod hasharon": {
-        "lon": 34.8883,
-        "lat": 32.1508,
-        "country": "IL",
-        "timezone": 10800
+    "amsterdam": {
+        "lon": 4.8897,
+        "lat": 52.374,
+        "country": "NL",
+        "timezone": 7200
     }
 }

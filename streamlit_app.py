@@ -109,20 +109,25 @@ def save_timezone():
     st.write("Enter your local timezone")
     timezone_options = pytz.all_timezones
     selected_timezone = st.selectbox("Select your timezone", timezone_options)
-    store_timezone(selected_timezone)
-    st.write(f"Local time: {print_time_for_stored_timezone()}")
+    if st.button("Save"):
+        store_conf('timezone', selected_timezone)
+        st.write(f"Local time: {print_time_for_stored_timezone()}")
 
+def change_preferences():
+    st.write("Enter your preferred units type")
+    temp_units = ["Celsius", "Fahrenheit"]
+    selected_unit = st.selectbox("Select your preferred units", temp_units)
+    if st.button("Save"):
+        store_conf('units', selected_unit)
+        st.write(f"Preferred units: {read_conf('units')}")
 
-
-configuration_options = ["Manage stored locations", "Change API key", "Enter your preferred metrics", "Enter your local timezone"]
+configuration_options = ["Manage stored locations", "Enter your preferred metrics", "Enter your local timezone"]
 def process_selection():
     
     if st.session_state.selected_option == "Manage stored locations":
-        manage_locations()
-    elif st.session_state.selected_option == "Change API key":
-        st.write("Change API key")
+        manage_locations()    
     elif st.session_state.selected_option == "Enter your preferred metrics":
-        st.write("Enter your preferred metrics")
+        change_preferences()
     elif st.session_state.selected_option == "Enter your local timezone":
         save_timezone()
 

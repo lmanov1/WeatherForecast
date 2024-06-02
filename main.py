@@ -7,7 +7,6 @@ print(f"Checking weather for stored locations:")
 for location in locations:
    print_city_weather(location, api_key, print_in_place=True)
 
-
 answer = input("Would you like to check another city? (yes/no)")   
 if answer.lower() == "yes" or answer.lower() == "y":    
     while True:

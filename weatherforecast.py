@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
-from datetime import datetime
+from datetime import datetime , timedelta
 import pytz
 import sys
 if sys.version_info >= (3, 11):
     import tomllib
-    #print("ython 3.11 or later detected, using tomllib")
 else:
     import tomli as tomllib
+    import tomli_w as tomllib_w
 
 ############################### Global definitions ####################################
 exclude_list = ["icon", "id"]
-global_settings = {"units":"metric"} # later take from settings !!!!
 locations = {}
+units = "metric"
 
 location_settings = {
     "coord":["lon","lat"],
@@ -93,32 +93,62 @@ def print_locations():
     print(f"=========== Locations settings \n {json.dumps(locations, indent=4)} ")
 
 
-def store_timezone(timezone):
+conf_file_name = "./.streamlit/conf.toml"
+
+def store_conf(parameter, value):
     """
-    Stores timezone in 'timezone.toml' file 
+    Stores timezone in 'conf.toml' file 
     Returns:
         None.
-    """
-    with open("./.streamlit/timezone.toml", "w") as f:
-        f.write(f"timezone = '{timezone}'")
-
-def read_timezone():
-    """
-    Reads the timezone from the '.streamlit/timezone.toml' file and returns it.
-    Returns:
-        str: Previouisly stored timezone.
-    """
-    timezone_file = Path("./.streamlit/timezone.toml")
-    if timezone_file.exists() and timezone_file.is_file() and timezone_file.stat().st_size > 0:        
-        with open("./.streamlit/timezone.toml", "rb") as f:
-            toml_dict = tomllib.load(f)
-            return toml_dict['timezone']       
+    """                 
+    try:        
+        f = open(conf_file_name, "rb")            
+    except FileNotFoundError:
+        print('error FileNotFoundError')
+        pass
     else:
-        timezone = "UTC"
-    return timezone
+        with f:            
+            toml_dict = tomllib.load(f)            
+            if parameter not in toml_dict.keys():
+                toml_dict[parameter] = value
+            else:                
+                toml_dict.update({parameter: value})
+            #print(f" writing toml_dict = {toml_dict }")
+            f.close()            
+            f = open(conf_file_name, "w")
+            f.write(tomllib_w.dumps(toml_dict))
+            f.close()
+
+
+def read_conf(parameter):
+    """
+    Reads the configuration from the '.streamlit/config.toml' file and returns it.
+    Returns:
+        str: Previouisly stored parameter [timezone , units].
+    """        
+    try:        
+        f = open(conf_file_name, "rb")                
+    except FileNotFoundError:
+        print('error FileNotFoundError')
+        pass   
+    else:
+        with f:   # should be closed automatically on block end
+            toml_dict = tomllib.load(f)
+            if toml_dict is not None and toml_dict.get(parameter) is not None:                            
+                #print(f" returning {parameter} = {toml_dict[parameter]}")
+                f.close()
+                return toml_dict[parameter]            
+
+    f.close()
+    if parameter == 'timezone':
+        return "UTC"
+    elif parameter == 'units':
+        return "Celcius"
+    else: return None
+    
 
 def print_time_for_stored_timezone(print_in_place=False):   
-    datetime_sel_tz = datetime.now(pytz.timezone(read_timezone())) 
+    datetime_sel_tz = datetime.now(pytz.timezone(read_conf('timezone'))) 
 
     local_time= datetime_sel_tz.strftime('%A, %B %d, %Y, %I:%M %p %Z %z')
     if print_in_place:
@@ -217,14 +247,28 @@ def parse_openweather_response(json_str):
                     else:
                         locations[city.lower()][item] = value[item]
 
-        if data["dt"] is not None and data["timezone"] is not None:
-            dt_at_dest_str = datetime.fromtimestamp(data["dt"]+data["timezone"]).strftime("%A, %B %d, %Y, %I:%M %p")
-            remote_tz = data["timezone"]/(60*60)
-            weather["Time at destination"] = f"{dt_at_dest_str} UTC+{remote_tz}"
+        if data["dt"] is not None and data["timezone"] is not None:            
+            local_time_at_dest = datetime.utcfromtimestamp(data["dt"]) + timedelta(seconds=data["timezone"])
+            dt_at_dest_str = local_time_at_dest.strftime("%A, %B %d, %Y, %I:%M %p")
+            formatted_remote_offset_hours = "{:+}".format(data["timezone"]/(60*60))
+            weather["Time at destination"] = f"{dt_at_dest_str} UTC{formatted_remote_offset_hours}"
 
     return weather
 
-
+def get_units():
+    """
+    Reads the units from the '.streamlit/config.toml' file and returns it.
+    Returns:
+        str: The units.
+    """
+    units = read_conf('units')
+    if units == "Celcius":
+        return "metric"
+    elif units == "Farenheit":
+        return "imperial"
+    else:
+        return "metric"
+    
 def weather_checker(city_name , api_key):
     '''
         The function `weather_checker(city_name)` is responsible for checking the weather information for a given city.
@@ -236,7 +280,7 @@ def weather_checker(city_name , api_key):
         Overall, the `weather_checker(city_name)` function provides a convenient way to check the weather for a specific city
         using the OpenWeatherMap API.
     '''
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name.lower()}&appid={api_key}&units=metric"
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name.lower()}&appid={api_key}&units={get_units()}"
     response = requests.get(url)
     data = response.json()
 
