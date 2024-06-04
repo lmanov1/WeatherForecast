@@ -177,6 +177,7 @@ def main():
         st.write("Weather at your stored locations")
         for location in locations:
             st_print_location(location , st_api_key())
+        store_locations()
     elif selected == "Settings":
         process_settings()
     elif selected == "Exit":
