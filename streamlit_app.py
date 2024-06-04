@@ -173,6 +173,7 @@ def main():
 
     if selected == "Enter a city name":
         get_and_process_city_name()
+        store_locations()
     elif selected == "History":
         st.write("Weather at your stored locations")
         for location in locations:
