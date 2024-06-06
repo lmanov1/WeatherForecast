@@ -83,14 +83,14 @@ def checkbox_container(data):
             if st.session_state['dynamic_checkbox_' + i] == True:
                 if i.lower() in locations.keys():
                     locations.pop(i.lower())
-                    store_locations()                    
+                    store_locations()
                     to_remove.append(i)
                 else:
                     st.write(f"Location {i} not found in stored locations")
-        
+
         for i in to_remove:
             data.remove(i)
-            
+
     for i in data:
         st.checkbox(i, key='dynamic_checkbox_' + i)
 
@@ -98,13 +98,13 @@ def get_selected_checkboxes():
     return [i.replace('dynamic_checkbox_','') for i in st.session_state.keys() if i.startswith('dynamic_checkbox_') and st.session_state[i]]
 
 def manage_locations():
-    
+
     locations = read_locations()
     locations_data_names = [ location.capitalize() for location in locations.keys()]
 
-    if 'locations_data' in st.session_state.keys():        
-        del st.session_state['locations_data']     
-    st.session_state['locations_data'] = locations_data_names        
+    if 'locations_data' in st.session_state.keys():
+        del st.session_state['locations_data']
+    st.session_state['locations_data'] = locations_data_names
 
     checkbox_container(locations_data_names)
     #st.write('You selected:')
@@ -121,16 +121,15 @@ def save_timezone():
 def change_preferences():
     st.write("Enter your preferred units type")
     temp_units = ["Celsius", "Fahrenheit"]
-    selected_unit = st.selectbox("Select your preferred units", temp_units)
+    selected_unit = st.selectbox("Select your preferred units", temp_units, index=temp_units.index(read_conf('units')))
     if st.button("Save"):
         store_conf('units', selected_unit)
-        st.write(f"Preferred units: {read_conf('units')}")
 
 configuration_options = ["Manage stored locations", "Enter your preferred metrics", "Enter your local timezone"]
 def process_selection():
-    
+
     if st.session_state.selected_option == "Manage stored locations":
-        manage_locations()    
+        manage_locations()
     elif st.session_state.selected_option == "Enter your preferred metrics":
         change_preferences()
     elif st.session_state.selected_option == "Enter your local timezone":
