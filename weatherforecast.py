@@ -46,7 +46,10 @@ weather_api_units = {
                         "gust":"m/s" ,
                         "1h": "mm"
                     }
-weather = {}
+
+weather_replace_descriptions =  [ 'Current conditions' , 'Description' , 'Now' , 'Feels like' , 'Low' , 'High' , 'Pressure' , 'Humidity' ]
+
+
 
 ############################### Locations and persisitent settings ####################################
 from pathlib import Path
@@ -211,11 +214,13 @@ def parse_openweather_response(json_str):
     if city not in locations.keys():
         locations[city.lower()] = {}
 
+    weather = {}
+
     for key, value in data.items():
         for api_key, api_value in weather_api1.items():
             if api_key  == key:
                 if isinstance(value, list):
-                    # As 'weather' is the only list in API response, we can take only first weather report
+                    # As 'weather' is the only list in API response, we can take only first weather report here
                     weather_report0 = value[0]
                     for item in weather_report0.keys():
                         if item not in exclude_list and item in api_value:
@@ -233,12 +238,15 @@ def parse_openweather_response(json_str):
                                 weather[item] = value[item]
                 else:
                     if value not in exclude_list and value in api_value:
+                        # value1  = value.capitalize() if isinstance(value, str) else value 
+                        # print(f"new value1 {value1}") 
                         if value in weather_api_units.keys():
                             weather[api_key] = f"{value}  {weather_api_units.get(api_key)}"
                         else:
                             weather[api_key] = value
 
-
+        final_weather = dict(zip(weather_replace_descriptions, list(weather.values())))
+                
         for location_key , location_value in location_settings.items()  :
             if location_key == key:
                 for item in  location_settings[location_key]:
@@ -251,9 +259,9 @@ def parse_openweather_response(json_str):
             local_time_at_dest = datetime.utcfromtimestamp(data["dt"]) + timedelta(seconds=data["timezone"])
             dt_at_dest_str = local_time_at_dest.strftime("%A, %B %d, %Y, %I:%M %p")
             formatted_remote_offset_hours = "{:+}".format(data["timezone"]/(60*60))
-            weather["Time at destination"] = f"{dt_at_dest_str} UTC{formatted_remote_offset_hours}"
+            final_weather["Time at destination"] = f"{dt_at_dest_str} UTC{formatted_remote_offset_hours}"
 
-    return weather
+    return final_weather
 
 def get_units():
     """

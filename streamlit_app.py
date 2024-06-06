@@ -78,14 +78,19 @@ def checkbox_container(data):
         for i in data:
             st.session_state['dynamic_checkbox_' + i] = False
     if cols[3].button('Remove Selected'):
+        to_remove = []
         for i in data:
             if st.session_state['dynamic_checkbox_' + i] == True:
                 if i.lower() in locations.keys():
                     locations.pop(i.lower())
-                    store_locations()
-                    data.remove(i)
+                    store_locations()                    
+                    to_remove.append(i)
                 else:
                     st.write(f"Location {i} not found in stored locations")
+        
+        for i in to_remove:
+            data.remove(i)
+            
     for i in data:
         st.checkbox(i, key='dynamic_checkbox_' + i)
 
@@ -93,15 +98,15 @@ def get_selected_checkboxes():
     return [i.replace('dynamic_checkbox_','') for i in st.session_state.keys() if i.startswith('dynamic_checkbox_') and st.session_state[i]]
 
 def manage_locations():
+    
     locations = read_locations()
+    locations_data_names = [ location.capitalize() for location in locations.keys()]
 
-    if 'locations_data' not in st.session_state.keys():
-        locations_data = [ location.capitalize() for location in locations.keys()]
-        st.session_state['locations_data'] = locations_data
-    else:
-        locations_data = st.session_state['locations_data']
+    if 'locations_data' in st.session_state.keys():        
+        del st.session_state['locations_data']     
+    st.session_state['locations_data'] = locations_data_names        
 
-    checkbox_container(locations_data)
+    checkbox_container(locations_data_names)
     #st.write('You selected:')
     #st.write(get_selected_checkboxes())
 
