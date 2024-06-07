@@ -37,7 +37,7 @@ Stored locations are manageable in the settings.
 
 ## Live Demo
 
-It is possible to access a live demo of the application [Here (streamlit app)](https://weatherforecast-yhgyten7mk2jmtewukn5yy.streamlit.app/ "Weather Watchdog")
+It is possible to access a live demo of the application [Here (streamlit app)](https://weatherforecast-bfegqddtv7ftqphrzzq84d.streamlit.app/ "Weather Watchdog")
 
 *Best seen with dark browser theme*
 
