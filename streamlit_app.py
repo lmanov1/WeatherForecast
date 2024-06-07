@@ -149,7 +149,9 @@ def save_timezone():
     """
     st.write("Enter your local timezone")
     timezone_options = pytz.all_timezones
-    selected_timezone = st.selectbox("Select your timezone", timezone_options)
+    saved_timezone = read_conf('timezone')
+
+    selected_timezone = st.selectbox("Select your timezone", timezone_options, timezone_options.index(saved_timezone))
     if st.button("Save"):
         store_conf('timezone', selected_timezone)
         st.write(f"Local time: {print_time_for_stored_timezone()}")
