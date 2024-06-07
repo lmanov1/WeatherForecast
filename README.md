@@ -19,7 +19,7 @@ Available options in this menu currently include:
 * Managing your stored locations (add/remove)   
 * Updating your local timezone. This allows streamlit to correctly display your local time 😊
 
-You can monitor weather conditions in stored locations at any time by chossing '**History**' option from the sidebar.
+You can monitor weather conditions in stored locations at any time by chossing '**My cities**' option from the sidebar.
 
 ### Console Python version
 
@@ -35,7 +35,7 @@ Same apply to any other settings.
 
 ## Live Demo
 
-You can access a live demo of the application [Here](https://weatherforecast-mu4smgxbfdevrvf97suff3.streamlit.app/ "Weather watchdog")
+You can access a live demo of the application [Here](https://weatherforecast-mu4smgxbfdevrvf97suff3.streamlit.app/ "Weather Watchdog")
 
 *Best seen with dark browser team*
 

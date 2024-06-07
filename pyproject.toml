@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "weatherforecast"
+name = "Weather Watchdog"
 version = "0.1.0"
-description = "This is a Python project that provides a weather forecast for a given location(s) using the OpenWeatherMap API."
+description = "This is a Python project that monitors weather in preferred locations using the OpenWeatherMap API."
 authors = ["Lidi Manov <peru12003@gmail.com>"]
 license = "LICENSE"
 readme = "README.md"
@@ -11,9 +11,8 @@ python = "^3.10"
 pytz = "^2024.1"
 requests = "^2.32.3"
 streamlit = "^1.35.0"
-tomli = "^2.0.1"
 streamlit-option-menu = "^0.3.13"
-tomli-w = "^1.0.0"
+tomlkit = "^0.12.5"
 
 
 [build-system]

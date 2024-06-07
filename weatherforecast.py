@@ -4,13 +4,11 @@ import json
 from datetime import datetime , timedelta
 import pytz
 import sys
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
-    import tomli_w as tomllib_w
+import tomlkit
+from pathlib import Path
 
 ############################### Global definitions ####################################
+conf_file_name = "./.streamlit/conf.toml"
 exclude_list = ["icon", "id"]
 locations = {}
 units = "metric"
@@ -31,40 +29,40 @@ weather_api1 = {
         "main": ["temp", "feels_like", "temp_min", "temp_max", "pressure", "humidity"],
     }
 
-weather_api_units = { 'metric':{
-                        "temp": "°C",
-                        "feels_like": "°C",
-                        "temp_min": "°C",
-                        "temp_max": "°C",
-                        "pressure": "hPa",
-                        "humidity": "%",
-                        "visibility": "meters",
-                        "speed": "m/s" ,
-                        "deg": "°" ,
-                        "gust":"m/s" ,
-                        "1h": "mm"
-                    },
-                    'imperial': {
-                        "temp": "°F",
-                        "feels_like": "°F",
-                        "temp_min": "°F",
-                        "temp_max": "°F",
-                        "pressure": "hPa",
-                        "humidity": "%",
-                        "visibility": "meters",
-                        "speed": "miles/hour," ,
-                        "deg": "°" ,
-                        "gust":"miles/hour," ,
-                        "1h": "mm"
-                    }
-                    }
+weather_api_units = {   'metric': {
+                            "temp": "°C",
+                            "feels_like": "°C",
+                            "temp_min": "°C",
+                            "temp_max": "°C",
+                            "pressure": "hPa",
+                            "humidity": "%",
+                            "visibility": "meters",
+                            "speed": "m/s" ,
+                            "deg": "°" ,
+                            "gust":"m/s" ,
+                            "1h": "mm"
+                        },
+                        'imperial': {
+                            "temp": "°F",
+                            "feels_like": "°F",
+                            "temp_min": "°F",
+                            "temp_max": "°F",
+                            "pressure": "hPa",
+                            "humidity": "%",
+                            "visibility": "meters",
+                            "speed": "miles/hour," ,
+                            "deg": "°" ,
+                            "gust":"miles/hour," ,
+                            "1h": "mm"
+                        }
+                }
+# used to replace the keys in the weather dictionary with more human-readable descriptions
+weather_replace_descriptions =  [
+    'Current conditions' , 'Description' , 'Now' ,
+    'Feels like' , 'Low' , 'High' , 'Pressure' , 'Humidity'
+    ]
+############################### Managing locations and persisitent settings ####################################
 
-weather_replace_descriptions =  [ 'Current conditions' , 'Description' , 'Now' , 'Feels like' , 'Low' , 'High' , 'Pressure' , 'Humidity' ]
-
-
-
-############################### Locations and persisitent settings ####################################
-from pathlib import Path
 def read_locations():
     """
     Reads the locations from the 'settings.json' file and returns them as a list.
@@ -108,13 +106,17 @@ def print_locations():
     print(f"=========== Locations settings \n {json.dumps(locations, indent=4)} ")
 
 
-conf_file_name = "./.streamlit/conf.toml"
 
 def store_conf(parameter, value):
     """
-    Stores timezone in 'conf.toml' file
+    Stores the given parameter and its corresponding value in a configuration file.
+
+    Args:
+        parameter (str): The parameter to store.
+        value: The value of the parameter.
+
     Returns:
-        None.
+        None
     """
     try:
         f = open(conf_file_name, "rb")
@@ -123,23 +125,29 @@ def store_conf(parameter, value):
         pass
     else:
         with f:
-            toml_dict = tomllib.load(f)
+            toml_dict = tomlkit.parse(f.read())
             if parameter not in toml_dict.keys():
                 toml_dict[parameter] = value
             else:
-                toml_dict.update({parameter: value})
-            #print(f" writing toml_dict = {toml_dict }")
+                toml_dict[parameter] = value
             f.close()
             f = open(conf_file_name, "w")
-            f.write(tomllib_w.dumps(toml_dict))
+            f.write(tomlkit.dumps(toml_dict))
             f.close()
 
 
 def read_conf(parameter):
     """
-    Reads the configuration from the '.streamlit/config.toml' file and returns it.
+    Reads the configuration file and returns the value of the specified parameter.
+
+    Parameters:
+    - parameter (str): The name of the parameter to retrieve from the configuration file.
+
     Returns:
-        str: Previouisly stored parameter [timezone , units].
+    - The value of the specified parameter if found in the configuration file.
+    - "UTC" if the parameter is 'timezone' and not found in the configuration file.
+    - "Celcius" if the parameter is 'units' and not found in the configuration file.
+    - None if the parameter is not found in the configuration file and is not 'timezone' or 'units'.
     """
     try:
         f = open(conf_file_name, "rb")
@@ -147,41 +155,47 @@ def read_conf(parameter):
         print('error FileNotFoundError')
         pass
     else:
-        with f:   # should be closed automatically on block end
-            toml_dict = tomllib.load(f)
+        with f:
+            toml_dict = tomlkit.parse(f.read())
             if toml_dict is not None and toml_dict.get(parameter) is not None:
-                #print(f" returning {parameter} = {toml_dict[parameter]}")
                 f.close()
                 return toml_dict[parameter]
+
     # Defaults if none found
     f.close()
     if parameter == 'timezone':
         return "UTC"
     elif parameter == 'units':
         return "Celcius"
-    else: return None
+    else:
+        return None
 
 
 def print_time_for_stored_timezone(print_in_place=False):
     datetime_sel_tz = datetime.now(pytz.timezone(read_conf('timezone')))
-
     local_time= datetime_sel_tz.strftime('%A, %B %d, %Y, %I:%M %p %Z %z')
     if print_in_place:
         print(local_time)
     return f"{local_time}"
 
+
 ############################### API keys ####################################
+api_secret_file = "./.streamlit/secrets.toml"
 def my_api_key():
     """
-    Reads the API key from the '.security.json' file and returns it.
-    Returns:
-        str: The API key.
-    """
+    Retrieves the OpenWeatherMap API key from a secret file or prompts the user to enter it.
 
-    key_file = Path("./.streamlit/secrets.toml")
+    If a secret file containing the API key exists and is not empty, the function reads the key from the file.
+    Otherwise, it prompts the user to enter the API key manually.
+
+    Returns:
+        str: The OpenWeatherMap API key.
+
+    """
+    key_file = Path(api_secret_file)
     if key_file.exists() and key_file.is_file() and key_file.stat().st_size > 0:
-        with open("./.streamlit/secrets.toml", "rb") as f:
-            toml_dict = tomllib.load(f)
+        with open(api_secret_file, "rb") as f:
+            toml_dict = tomlkit.parse(f.read())
             return toml_dict['openweathermap_api_key']
     else:
         return input("Please enter your OpenWeatherMap API key: ")
@@ -251,13 +265,11 @@ def parse_openweather_response(json_str):
                                 weather[item] = value[item]
                 else:
                     if value not in exclude_list and value in api_value:
-                        # value1  = value.capitalize() if isinstance(value, str) else value
-                        # print(f"new value1 {value1}")
                         if value in units_system.keys():
                             weather[api_key] = f"{value}  {units_system.get(api_key)}"
                         else:
                             weather[api_key] = value
-
+        # fix the keys in the weather dictionary to be more human-readable
         final_weather = dict(zip(weather_replace_descriptions, list(weather.values())))
 
         for location_key , location_value in location_settings.items()  :
@@ -278,7 +290,7 @@ def parse_openweather_response(json_str):
 
 def get_units():
     """
-    Reads the units from the '.streamlit/config.toml' file and returns it.
+    Reads the units configuration from configuration file and returns the value.
     Returns:
         str: The units.
     """

@@ -6,30 +6,41 @@ from streamlit_option_menu import option_menu
 import pytz
 import datetime
 
-####      Helper functions     ####
-def st_print_location(location,api_key):
+def st_print_location(location, api_key):
+    """
+    Prints the weather information for a given location.
+
+    Args:
+        location (str): The name of the location.
+        api_key (str): The API key for accessing weather data.
+
+    Returns:
+        None
+    """
     weather = print_city_weather(location, api_key)
 
     if len(weather) == 1:
         st.write(f"No weather data found for {location}")
-        st.write( weather)
+        st.write(weather)
         return
-    # Create a DataFrame from the weather data  ,   location value as an index
-    df = pd.DataFrame(weather.items(), columns=[location.capitalize(), ''])
 
-    # CSS to inject contained in a string
+    df = pd.DataFrame(weather.items(), columns=[location.capitalize(), ''])
     hide_table_row_index = """
                 <style>
                 tbody th {display:none}
                 .blank {display:none}
                 </style>
                 """
-    # Inject CSS with Markdown
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
-    # Display a static table
     st.table(df)
 
 def weather_at_city():
+    """
+    Handles the weather information for a given city.
+
+    Returns:
+        None
+    """
     if st.session_state.city_name.lower() == "exit" or st.session_state.city_name.lower() == "quit":
         store_locations()
         st.write(".. Exiting...")
@@ -40,19 +51,23 @@ def weather_at_city():
         else:
             st_print_location(st.session_state.city_name, st_api_key())
 
-
 def get_and_process_city_name():
+    """
+    Gets and processes the city name entered by the user.
 
-    if "city_name" not in st.session_state :
+    Returns:
+        None
+    """
+    if "city_name" not in st.session_state:
         st.session_state.city_name = ""
 
     city_name = st.text_input("Enter city name (or 'exit' to quit) ",
-            on_change= weather_at_city(), key='city_name')
-
+                              on_change=weather_at_city(), key='city_name')
 
 def st_api_key():
     """
     Reads the API key from the streamlite's secrets store and returns it.
+
     Returns:
         str: The API key.
     """
@@ -61,10 +76,16 @@ def st_api_key():
     else:
         return st.text_input("Please enter your OpenWeatherMap API key: ")
 
-##### Settings  ####
-
-
 def checkbox_container(data):
+    """
+    Manages the checkboxes for storing and removing locations.
+
+    Args:
+        data (list): List of locations.
+
+    Returns:
+        None
+    """
     new_data = st.text_input('Enter new location to store')
     cols = st.columns(4)
     if cols[0].button('Add location'):
@@ -95,22 +116,37 @@ def checkbox_container(data):
         st.checkbox(i, key='dynamic_checkbox_' + i)
 
 def get_selected_checkboxes():
-    return [i.replace('dynamic_checkbox_','') for i in st.session_state.keys() if i.startswith('dynamic_checkbox_') and st.session_state[i]]
+    """
+    Gets the selected checkboxes.
+
+    Returns:
+        list: List of selected checkboxes.
+    """
+    return [i.replace('dynamic_checkbox_', '') for i in st.session_state.keys() if i.startswith('dynamic_checkbox_') and st.session_state[i]]
 
 def manage_locations():
+    """
+    Manages the stored locations.
 
+    Returns:
+        None
+    """
     locations = read_locations()
-    locations_data_names = [ location.capitalize() for location in locations.keys()]
+    locations_data_names = [location.capitalize() for location in locations.keys()]
 
     if 'locations_data' in st.session_state.keys():
         del st.session_state['locations_data']
     st.session_state['locations_data'] = locations_data_names
 
     checkbox_container(locations_data_names)
-    #st.write('You selected:')
-    #st.write(get_selected_checkboxes())
 
 def save_timezone():
+    """
+    Saves the user's local timezone.
+
+    Returns:
+        None
+    """
     st.write("Enter your local timezone")
     timezone_options = pytz.all_timezones
     selected_timezone = st.selectbox("Select your timezone", timezone_options)
@@ -119,6 +155,12 @@ def save_timezone():
         st.write(f"Local time: {print_time_for_stored_timezone()}")
 
 def change_preferences():
+    """
+    Changes the user's preferred units type.
+
+    Returns:
+        None
+    """
     st.write("Enter your preferred units type")
     temp_units = ["Celsius", "Fahrenheit"]
     selected_unit = st.selectbox("Select your preferred units", temp_units, index=temp_units.index(read_conf('units')))
@@ -126,8 +168,14 @@ def change_preferences():
         store_conf('units', selected_unit)
 
 configuration_options = ["Manage stored locations", "Enter your preferred metrics", "Enter your local timezone"]
-def process_selection():
 
+def process_selection():
+    """
+    Processes the selected option from the settings menu.
+
+    Returns:
+        None
+    """
     if st.session_state.selected_option == "Manage stored locations":
         manage_locations()
     elif st.session_state.selected_option == "Enter your preferred metrics":
@@ -135,39 +183,45 @@ def process_selection():
     elif st.session_state.selected_option == "Enter your local timezone":
         save_timezone()
 
-
-
 def process_settings():
+    """
+    Processes the settings menu.
+
+    Returns:
+        None
+    """
     st.title("Weather settings")
-    if "selected_option" not in st.session_state :
+    if "selected_option" not in st.session_state:
         st.session_state.selected_option = configuration_options[0]
 
     hor_line = '⎯'*30
     st.selectbox(
         f'{hor_line} **Select one of the following** {hor_line}',
         configuration_options,
-        key='selected_option', on_change= process_selection() ,
+        key='selected_option', on_change=process_selection(),
         #index=0,
         placeholder="Select a settings option...",
     )
 
-
-##############################################################################
-
 def main():
-    #st.set_page_config(layout="wide")
+    """
+    Main function to run the Weather Forecast application.
+
+    Returns:
+        None
+    """
     locations = read_locations()
 
     with st.sidebar:
-        st.image("./Sun_Wave_Logo_T.png",width=150)
+        st.image("./Sun_Wave_Logo_T.png", width=150)
         st.text(print_time_for_stored_timezone())
 
         selected = option_menu(
             menu_title=f"",
-            options=["Enter a city name", "History", "Settings", "Exit"],
+            options=["Enter a city name", "My cities", "Settings", "Exit"],
             default_index=0,
             orientation="vertical",
-             styles={
+            styles={
                 "container": {"padding": "0!important"},
                 "icon": {"color": "orange", "font-size": "16px"},
                 "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "fee0e3"},
@@ -178,10 +232,10 @@ def main():
     if selected == "Enter a city name":
         get_and_process_city_name()
         store_locations()
-    elif selected == "History":
+    elif selected == "My cities":
         st.write("Weather at your stored locations")
         for location in locations:
-            st_print_location(location , st_api_key())
+            st_print_location(location, st_api_key())
         store_locations()
     elif selected == "Settings":
         process_settings()
@@ -189,8 +243,6 @@ def main():
         store_locations()
         st.write(".. Bye-bye...See you soon")
         st.stop()
-
-
 
 if __name__ == "__main__":
     main()
