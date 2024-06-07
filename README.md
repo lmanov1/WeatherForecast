@@ -11,22 +11,22 @@ Details below.
 *There is a sidebar that allows you to navigate through the application*
 
 First , you need to enter at least one city name (i.e. 'location') . You can do this by either choosing '**Enter city name**' option on the sidebar or via the 'manage stored locations' in '**Settings**' (see below). In both cases you can add multiple locations for continuous monitoring.
-Current weather at the locations will be displayed and stored persistently.
+Current weather for any stored locations will be available @ '**My cities**' sidebar's menu
 
 You can configure your preferences with the sidebar's '**Settings**' option. 
 Available options in this menu currently include:
 * Choosing temperature units to use (Celsius or Fahrenheit)
-* Managing your stored locations (add/remove)   
+* Managing your stored locations (add/remove locations)   
 * Updating your local timezone. This allows streamlit to correctly display your local time 😊
 
 You can monitor weather conditions in stored locations at any time by chossing '**My cities**' option from the sidebar.
 
 ### Console Python version
 
-To start using the application, you will be prompted to enter a city name on console. Current weather conditions at the destination are printed rigth away , and the location will be stored persistently as you preference for hte future use. Each time you start anew , you will be presented with current weather in all the previously stored locations , plus a prompt to enter ant other location - or quit. 
+To start using the application, you will be prompted to enter a city name on console. Current weather conditions at the destination are printed rigth away , and the location will be stored persistently as you preference for the future use. Each time you start anew , you will be presented with current weather in all the previously stored locations , plus a prompt to enter any other location - or quit. 
 ## How It Works
 
-The application sends a GET request to the OpenWeatherMap API and receives a JSON response. This response is checked for errors. If there are no errors, the weather information is parsed from the JSON response and displayed to you.
+The application sends requests using the OpenWeatherMap's RESTful API and receives JSON responses. Those responses are checked for errors. If there are no errors, the weather information is parsed from the JSON response and displayed.
 
 ## User Preferences
 
@@ -35,9 +35,9 @@ Same apply to any other settings.
 
 ## Live Demo
 
-You can access a live demo of the application [Here](https://weatherforecast-mu4smgxbfdevrvf97suff3.streamlit.app/ "Weather Watchdog")
+You can access a live demo of the application [Here](https://weatherforecast-yhgyten7mk2jmtewukn5yy.streamlit.app/ "Weather Watchdog")
 
-*Best seen with dark browser team*
+*Best seen with dark browser theme*
 
 ## Cloning and running locally 
 *Please pay attention, poetry installation required in order to activate virtual environment*
