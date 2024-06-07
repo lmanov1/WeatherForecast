@@ -41,11 +41,6 @@ def weather_at_city():
     Returns:
         None
     """
-    # if st.session_state.city_name.lower() == "exit" or st.session_state.city_name.lower() == "quit":
-    #     store_locations()
-    #     st.write(".. Exiting...")
-    #     st.stop()
-    # else:
     if len(st.session_state.city_name) == 0:
         st.write("Please enter a valid city name")
     else:
@@ -241,10 +236,6 @@ def main():
         store_locations()
     elif selected == "Settings":
         process_settings()
-    # elif selected == "Exit":
-    #     store_locations()
-    #     st.write(".. Bye-bye...See you soon")
-    #     st.stop()
 
 if __name__ == "__main__":
     main()
