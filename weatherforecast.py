@@ -216,7 +216,7 @@ def print_city_weather(city_name, api_key, print_in_place=False):
     status, weather = weather_checker(city_name, api_key)
     if status != True:
         weather = {}
-        weather[f"Error retrieving current weather in {city_name}"] = f"Please be sure this is valid location name or try again later."
+        weather[f"Error retrieving current weather in {city_name}"] = f"Please be sure this is valid location name"
 
     if print_in_place:
         print(f"\nCurrent weather in {city_name.capitalize()}")

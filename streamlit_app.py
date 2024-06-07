@@ -18,12 +18,12 @@ def st_print_location(location, api_key):
         None
     """
     weather = print_city_weather(location, api_key)
-
+    # Check if error description
     if len(weather) == 1:
-        st.write(f"No weather data found for {location}")
-        st.write(weather)
+        st.write(f"No weather data found for \"{location}\"")
+        st.write(weather.popitem()[1])
         return
-
+    # Else - process the weather data
     df = pd.DataFrame(weather.items(), columns=[location.capitalize(), ''])
     hide_table_row_index = """
                 <style>
@@ -41,15 +41,15 @@ def weather_at_city():
     Returns:
         None
     """
-    if st.session_state.city_name.lower() == "exit" or st.session_state.city_name.lower() == "quit":
-        store_locations()
-        st.write(".. Exiting...")
-        st.stop()
+    # if st.session_state.city_name.lower() == "exit" or st.session_state.city_name.lower() == "quit":
+    #     store_locations()
+    #     st.write(".. Exiting...")
+    #     st.stop()
+    # else:
+    if len(st.session_state.city_name) == 0:
+        st.write("Please enter a valid city name")
     else:
-        if len(st.session_state.city_name) == 0:
-            st.write("Please enter a valid city name")
-        else:
-            st_print_location(st.session_state.city_name, st_api_key())
+        st_print_location(st.session_state.city_name, st_api_key())
 
 def get_and_process_city_name():
     """
@@ -61,8 +61,8 @@ def get_and_process_city_name():
     if "city_name" not in st.session_state:
         st.session_state.city_name = ""
 
-    city_name = st.text_input("Enter city name (or 'exit' to quit) ",
-                              on_change=weather_at_city(), key='city_name')
+    city_name = st.text_input("Enter city name",
+                on_change = weather_at_city(), key='city_name')
 
 def st_api_key():
     """
@@ -218,7 +218,7 @@ def main():
 
         selected = option_menu(
             menu_title=f"",
-            options=["Enter a city name", "My cities", "Settings", "Exit"],
+            options=["Enter a city name", "My cities", "Settings"],
             default_index=0,
             orientation="vertical",
             styles={
@@ -239,10 +239,10 @@ def main():
         store_locations()
     elif selected == "Settings":
         process_settings()
-    elif selected == "Exit":
-        store_locations()
-        st.write(".. Bye-bye...See you soon")
-        st.stop()
+    # elif selected == "Exit":
+    #     store_locations()
+    #     st.write(".. Bye-bye...See you soon")
+    #     st.stop()
 
 if __name__ == "__main__":
     main()
