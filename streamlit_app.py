@@ -247,8 +247,7 @@ def main():
 
     local_time_text.text(print_time_for_stored_timezone())
 
-    if selected == "My cities":
-        #st.write("Weather at your stored locations")
+    if selected == "My cities":        
         if len(locations) == 0:
             st.write("No locations currently stored , please add some")
         else:
