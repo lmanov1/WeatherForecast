@@ -6,6 +6,7 @@ import pytz
 import sys
 import tomlkit
 from pathlib import Path
+import base64
 
 ############################### Global definitions ####################################
 conf_file_name = "./.streamlit/conf.toml"
@@ -106,6 +107,34 @@ def print_locations():
     print(f"=========== Locations settings \n {json.dumps(locations, indent=4)} ")
 
 
+###############################   Persistent settings  ####################################
+def encode_string(string):
+    """
+    Encodes a string using base64 encoding.
+
+    Args:
+        string (str): The string to encode.
+
+    Returns:
+        str: The base64 encoded string.
+    """
+    encoded_string = base64.b64encode(string.encode()).decode()
+    return encoded_string
+
+
+def decode_string(encoded_string):  
+    """
+    Decodes a base64 encoded string.
+
+    Args:
+        encoded_string (str): The base64 encoded string to decode.
+
+    Returns:
+        str: The decoded string.
+    """
+    decoded_string = base64.b64decode(encoded_string).decode()
+    return decoded_string       
+
 
 def store_conf(parameter, value):
     """
@@ -173,7 +202,7 @@ def read_conf(parameter):
 
 def print_time_for_stored_timezone(print_in_place=False):
     datetime_sel_tz = datetime.now(pytz.timezone(read_conf('timezone')))
-    local_time= datetime_sel_tz.strftime('%A, %B %d, %Y, %I:%M %p %Z %z')
+    local_time= f"Local time: {datetime_sel_tz.strftime('%A, %B %d, %Y, %I:%M %p %Z %z')}"
     if print_in_place:
         print(local_time)
     return f"{local_time}"
@@ -193,12 +222,22 @@ def my_api_key():
 
     """
     key_file = Path(api_secret_file)
-    if key_file.exists() and key_file.is_file() and key_file.stat().st_size > 0:
+
+    if key_file.exists() == False or key_file.is_file() == False or key_file.stat().st_size == 0:
+        with open(api_secret_file, "w") as f:
+            f.close()
+
+        key = input("Please enter your OpenWeatherMap API key: ")
+        encoded_secret = encode_string(key)
+        with open(api_secret_file, "w") as f:
+            f.write(f'openweathermap_api_key = "{encoded_secret}"')
+            return key
+    
+    else:
         with open(api_secret_file, "rb") as f:
             toml_dict = tomlkit.parse(f.read())
-            return toml_dict['openweathermap_api_key']
-    else:
-        return input("Please enter your OpenWeatherMap API key: ")
+            return decode_string(toml_dict['openweathermap_api_key'])
+       
 
 ############################### Weather parsing and respresentation  ####################################
 def print_city_weather(city_name, api_key, print_in_place=False):
@@ -216,7 +255,7 @@ def print_city_weather(city_name, api_key, print_in_place=False):
     status, weather = weather_checker(city_name, api_key)
     if status != True:
         weather = {}
-        weather[f"Error retrieving current weather in \"{city_name}\""] = f"Please be sure this is valid location name"
+        weather[f"Error retrieving current weather in \"{city_name}\""] = f"Please be sure this is valid location name and/or your API key is valid"
 
     if print_in_place:
         print(f"\nCurrent weather in {city_name.capitalize()}")

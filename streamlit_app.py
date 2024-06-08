@@ -6,6 +6,10 @@ from streamlit_option_menu import option_menu
 import pytz
 import datetime
 
+st.set_page_config(layout="wide")
+local_time_text = st.empty()
+
+
 def st_print_location(location, api_key):
     """
     Prints the weather information for a given location.
@@ -23,16 +27,31 @@ def st_print_location(location, api_key):
         st.write(f"No weather data found for \"{location}\"")
         st.write(weather.popitem()[1])
         return
-    # Else - process the weather data
-    df = pd.DataFrame(weather.items(), columns=[location.capitalize(), ''])
-    hide_table_row_index = """
-                <style>
-                tbody th {display:none}
-                .blank {display:none}
-                </style>
-                """
-    st.markdown(hide_table_row_index, unsafe_allow_html=True)
-    st.table(df)
+
+    container = st.container( height=400, border=True)
+    with container:
+
+        cols = st.columns(2,gap="medium")
+        with cols[0]:
+            weather['Country'] = locations[location]['country']
+            # Else - process the weather data
+            df = pd.DataFrame(weather.items(), columns=[location.capitalize(), ''])
+            hide_table_row_index = """
+                        <style>
+                        tbody th {display:none}
+                        .blank {display:none}
+                        </style>
+                        """
+            st.markdown(hide_table_row_index, unsafe_allow_html=True)
+            st.table(df)
+        with cols[1]:
+            curr_coord = dict(locations[location])
+            map_data = pd.DataFrame({
+                    'latitude': [curr_coord['lat']],
+                    'longitude': [curr_coord['lon']]
+                })
+            ## Create a map with the data
+            st.map(map_data, size=300, color='#0044ff',zoom = 10)
 
 def weather_at_city():
     """
@@ -41,10 +60,10 @@ def weather_at_city():
     Returns:
         None
     """
-    if len(st.session_state.city_name) == 0:
-        st.write("Please enter a valid city name")
-    else:
+    if len(st.session_state.city_name) != 0:
         st_print_location(st.session_state.city_name, st_api_key())
+    else:
+        pass
 
 def get_and_process_city_name():
     """
@@ -67,7 +86,7 @@ def st_api_key():
         str: The API key.
     """
     if "openweathermap_api_key" in st.secrets:
-        return st.secrets["openweathermap_api_key"]
+        return decode_string(st.secrets["openweathermap_api_key"])
     else:
         return st.text_input("Please enter your OpenWeatherMap API key: ")
 
@@ -149,7 +168,7 @@ def save_timezone():
     selected_timezone = st.selectbox("Select your timezone", timezone_options, timezone_options.index(saved_timezone))
     if st.button("Save"):
         store_conf('timezone', selected_timezone)
-        st.write(f"Local time: {print_time_for_stored_timezone()}")
+        local_time_text.text(f"{print_time_for_stored_timezone()}")
 
 def change_preferences():
     """
@@ -164,7 +183,7 @@ def change_preferences():
     if st.button("Save"):
         store_conf('units', selected_unit)
 
-configuration_options = ["Manage stored locations", "Enter your preferred metrics", "Enter your local timezone"]
+configuration_options = ["Chose one option below", "Manage stored locations", "Enter your preferred metrics", "Enter your local timezone"]
 
 def process_selection():
     """
@@ -211,11 +230,11 @@ def main():
 
     with st.sidebar:
         st.image("./Sun_Wave_Logo_T.png", width=150)
-        st.text(print_time_for_stored_timezone())
 
+        side_bar_options= ['My cities', 'Settings']
         selected = option_menu(
             menu_title=f"",
-            options=["Enter a city name", "My cities", "Settings"],
+            options = side_bar_options,
             default_index=0,
             orientation="vertical",
             styles={
@@ -226,13 +245,19 @@ def main():
             }
         )
 
-    if selected == "Enter a city name":
+    local_time_text.text(print_time_for_stored_timezone())
+
+    if selected == "My cities":
+        #st.write("Weather at your stored locations")
+        if len(locations) == 0:
+            st.write("No locations currently stored , please add some")
+        else:
+            st.write("Would you like to add another location?")
+
         get_and_process_city_name()
-        store_locations()
-    elif selected == "My cities":
-        st.write("Weather at your stored locations")
         for location in locations:
             st_print_location(location, st_api_key())
+
         store_locations()
     elif selected == "Settings":
         process_settings()

@@ -11,9 +11,9 @@ Included notebook is deprecated.
 *There is a sidebar that allows you to navigate through the application*
 
 #### First, the user needs to enter at least one city name (i.e. 'location').
-The user can perform this by either choosing '**Enter city name**' option on the sidebar or via the '**manage stored locations**' from '**Settings**' menu on sidebar (details below).   
+The user can perform this by either choosing '**My cities**' option on the sidebar or via the '**manage stored locations**' from '**Settings**' menu on sidebar (details below).   
 In both cases the user can add multiple locations for continuous monitoring.    
-Up-to-date weather for any stored locations will be available @ '**My cities**' sidebar's menu
+Up-to-date weather for any stored locations will be available since added at '**My cities**' sidebar's menu
 
 #### The user can configure your preferences with the sidebar's '**Settings**' option.    
 Available options in this menu currently include:
@@ -24,8 +24,8 @@ Available options in this menu currently include:
 #### The user can monitor weather conditions in stored locations by choosing '**My cities**' option from the sidebar.
 
 ### Console Python version
-
-To start using the application, the user will be prompted to enter a city name on console. Current weather conditions at the destination are printed rigth away, and the location will be stored persistently as a preference for future use. Each time the user starts anew, it will be presented with current weather in all the previously stored locations, and a prompt to enter an additional location - or quit the application. 
+To start using the application, the user will be prompted to enter a valid OpenWeather API key , which will be encoded on base 64 and stored locally for subsequent use.
+Next step - the user will be prompted to enter a city name on console. Current weather conditions at the destination are printed rigth away, and the location will be stored persistently as a preference for future use. Each time the user starts anew, it will be presented with current weather in all the previously stored locations, and a prompt to enter an additional location - or quit the application. 
 ## Functional overview
 
 The application sends requests using the OpenWeatherMap's RESTful API and receives JSON responses. Those responses are checked for errors. If there are no errors, the weather information is parsed from the JSON response and displayed , and a location is added to preferences.
