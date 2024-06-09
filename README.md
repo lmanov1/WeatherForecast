@@ -12,14 +12,14 @@ While the terminal version is very basic, implementing only core project require
 *There is a sidebar that allows you to navigate through the application*
 
 #### First, the user needs to enter at least one city name (i.e., 'location').
-The user can perform this by either choosing the '**My cities**' option on the sidebar or via the '**manage stored locations**' from the '**Settings**' menu on the sidebar (details below).   
+The user can perform this by either choosing the '**My cities**' option on the sidebar or via the '**Manage stored locations**' from the '**Settings**' menu on the sidebar (details below).   
 In both cases, the user can add multiple locations for continuous monitoring.    
 Up-to-date weather reports for any stored locations available once were added at the '**My cities**' sidebar's menu
 
 #### The user can configure his preferences with the sidebar's '**Settings**' option.    
 Available options in this menu currently include:
 * Choosing temperature units (Celsius or Fahrenheit)
-* Managing stored locations (add/remove multiple locations)   
+* Managing stored locations (Add/remove multiple locations)   
 * Updating local timezone. This allows Streamlit to correctly display user's local time😊
 
 #### The user can monitor weather conditions in stored locations by choosing the '**My cities**' option from the sidebar.
