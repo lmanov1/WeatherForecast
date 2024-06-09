@@ -5,22 +5,46 @@
         "country": "GB",
         "timezone": 3600
     },
-    "panama": {
-        "lon": -80,
-        "lat": 9,
-        "country": "PA",
-        "timezone": -18000
+    "makkah al mukarramah": {
+        "lon": 39.8261,
+        "lat": 21.4267,
+        "country": "SA",
+        "timezone": 10800
     },
-    "paris": {
-        "lon": 2.3488,
-        "lat": 48.8534,
-        "country": "FR",
-        "timezone": 7200
+    "cairo": {
+        "lon": 31.2497,
+        "lat": 30.0626,
+        "country": "EG",
+        "timezone": 10800
     },
-    "amsterdam": {
-        "lon": 4.8897,
-        "lat": 52.374,
-        "country": "NL",
-        "timezone": 7200
+    "hod hasharon": {
+        "lon": 34.8883,
+        "lat": 32.1508,
+        "country": "IL",
+        "timezone": 10800
+    },
+    "beijing": {
+        "lon": 116.3972,
+        "lat": 39.9075,
+        "country": "CN",
+        "timezone": 28800
+    },
+    "petah tikva": {
+        "lon": 34.885,
+        "lat": 32.0917,
+        "country": "IL",
+        "timezone": 10800
+    },
+    "kfar saba": {
+        "lon": 34.9069,
+        "lat": 32.175,
+        "country": "IL",
+        "timezone": 10800
+    },
+    "ramat gan": {
+        "lon": 34.8142,
+        "lat": 32.0806,
+        "country": "IL",
+        "timezone": 10800
     }
 }
