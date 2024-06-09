@@ -61,7 +61,6 @@ weather_replace_descriptions =  [
     'Current conditions' , 'Description' , 'Image', 'Now' ,
     'Feels like' , 'Low' , 'High' , 'Pressure' , 'Humidity'
     ]
-############################### Managing locations and persisitent settings ####################################
 
 def read_locations():
     """
@@ -257,7 +256,7 @@ def print_city_weather(city_name, api_key, print_in_place=False):
         weather[f"Error retrieving current weather in \"{city_name}\""] = f"Please be sure this is valid location name and/or your API key is valid"
 
     if print_in_place:
-        print(f"\nCurrent weather in {city_name.capitalize()}")
+        print(f"\nCurrent weather in {city_name.title()}")
         if 'Image' in weather.keys(): # used only with streamlit version
             weather.pop('Image')
         for key, value in weather.items():

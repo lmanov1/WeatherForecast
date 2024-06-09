@@ -37,7 +37,7 @@ def st_print_location(location, api_key):
                 st.image(f"https://openweathermap.org/img/wn/{weather_image}@2x.png", width=70 )
                 weather.pop('Image') # no more need
                 
-                df = pd.DataFrame(weather.items(), columns=[location.capitalize(),''])
+                df = pd.DataFrame(weather.items(), columns=[location.title(),''])
                 hide_table_row_index = """
                             <style>
                             tbody th {display:none}
@@ -105,7 +105,7 @@ def checkbox_container(data):
     new_data = st.text_input('Enter new location to store')
     cols = st.columns(4)
     if cols[0].button('Add location'):
-        data.append(new_data.capitalize())
+        data.append(new_data.title())
         print_city_weather(new_data.lower(), st_api_key())
         store_locations()
     if cols[1].button('Select All'):
@@ -148,7 +148,7 @@ def manage_locations():
         None
     """
     locations = read_locations()
-    locations_data_names = [location.capitalize() for location in locations.keys()]
+    locations_data_names = [location.title() for location in locations.keys()]
 
     if 'locations_data' in st.session_state.keys():
         del st.session_state['locations_data']
