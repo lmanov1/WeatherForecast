@@ -10,7 +10,7 @@ import base64
 
 ############################### Global definitions ####################################
 conf_file_name = "./.streamlit/conf.toml"
-exclude_list = ["icon", "id"]
+exclude_list = ["id"]
 locations = {}
 units = "metric"
 
@@ -20,7 +20,6 @@ location_settings = {
     "timezone": "timezone"
 }
 
-# TBD: display icon from url : https://openweathermap.org/img/wn/{icon}}@2x.png
 weather_api = ["weather", "main"
                #"visibility" , "wind", "clouds", "rain", "snow"
               ]
@@ -59,7 +58,7 @@ weather_api_units = {   'metric': {
                 }
 # used to replace the keys in the weather dictionary with more human-readable descriptions
 weather_replace_descriptions =  [
-    'Current conditions' , 'Description' , 'Now' ,
+    'Current conditions' , 'Description' , 'Image', 'Now' ,
     'Feels like' , 'Low' , 'High' , 'Pressure' , 'Humidity'
     ]
 ############################### Managing locations and persisitent settings ####################################
@@ -259,6 +258,8 @@ def print_city_weather(city_name, api_key, print_in_place=False):
 
     if print_in_place:
         print(f"\nCurrent weather in {city_name.capitalize()}")
+        if 'Image' in weather.keys(): # used only with streamlit version
+            weather.pop('Image')
         for key, value in weather.items():
             print(f"{key}: {value}")
         print("\n")

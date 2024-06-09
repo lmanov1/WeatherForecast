@@ -27,31 +27,33 @@ def st_print_location(location, api_key):
         st.write(f"No weather data found for \"{location}\"")
         st.write(weather.popitem()[1])
         return
-
-    container = st.container( height=400, border=True)
-    with container:
-
-        cols = st.columns(2,gap="medium")
-        with cols[0]:
-            weather['Country'] = locations[location]['country']
-            # Else - process the weather data
-            df = pd.DataFrame(weather.items(), columns=[location.capitalize(), ''])
-            hide_table_row_index = """
-                        <style>
-                        tbody th {display:none}
-                        .blank {display:none}
-                        </style>
-                        """
-            st.markdown(hide_table_row_index, unsafe_allow_html=True)
-            st.table(df)
-        with cols[1]:
-            curr_coord = dict(locations[location])
-            map_data = pd.DataFrame({
-                    'latitude': [curr_coord['lat']],
-                    'longitude': [curr_coord['lon']]
-                })
-            ## Create a map with the data
-            st.map(map_data, size=300, color='#0044ff',zoom = 10)
+    if location in locations.keys():  
+        container = st.container( height=400, border=True)
+        with container:
+            cols = st.columns(2,gap="medium")
+            with cols[0]:                          
+                weather['Country'] = locations[location]['country']
+                weather_image = weather['Image']            
+                st.image(f"https://openweathermap.org/img/wn/{weather_image}@2x.png", width=70 )
+                weather.pop('Image') # no more need
+                
+                df = pd.DataFrame(weather.items(), columns=[location.capitalize(),''])
+                hide_table_row_index = """
+                            <style>
+                            tbody th {display:none}
+                            .blank {display:none}
+                            </style>
+                            """
+                st.markdown(hide_table_row_index, unsafe_allow_html=True)
+                st.table(df)
+            with cols[1]:
+                curr_coord = dict(locations[location])
+                map_data = pd.DataFrame({
+                        'latitude': [curr_coord['lat']],
+                        'longitude': [curr_coord['lon']]
+                    })
+                ## Create a map with the data
+                st.map(map_data, size=300, color='#0044ff',zoom = 10)
 
 def weather_at_city():
     """
