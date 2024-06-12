@@ -32,9 +32,9 @@ Each time the user starts anew, he or she will be presented with the current wea
 
 ## Functional Overview
 
-The application sends requests using the OpenWeatherMap's RESTful API and receives JSON responses. Those responses are checked for errors. If there are no errors, the weather information is parsed from the JSON response and displayed, and a location is added to preferences.
+The application sends requests using the OpenWeatherMap's RESTful API and receives JSON responses. Those responses are checked for errors. If there are no errors, the weather information is parsed from the JSON response and displayed, and a location is added to preferences.    
 Data representation utilizes stored user preferences (Fahrenheit/Celsius, miles/metres).    
-The application's Streamlit version provides relevant graphics and an interactive map for each location.
+The application's Streamlit version provides relevant graphics and an interactive map for each location.   
 
 ## User Locations Preferences
 
