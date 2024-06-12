@@ -1,8 +1,8 @@
 # Welcome to the Weather Watchdog Application
 This application is my Python project and is a part of my ongoing certification as a data scientist at BIU.   
 The application allows you to monitor weather conditions in your favorite locations all around the world. It uses the OpenWeatherMap API to retrieve and display the weather data.   
-The application has two versions - one running the Streamlit WEB UI platform  [link to live demo online](#live-demo)
-and the other - is an interactive Python script that should be run on the user's terminal.
+The application has two versions - one running on the Streamlit WEB UI platform  [link to live demo online](#live-demo)
+and the other - is an interactive python script that should be run on the user's terminal.
 The included notebook is deprecated, while still functional.   
 While the terminal version is very basic, implementing only core project requirements (plus some extras like secrets management and persistent user preferences), the Streamlit Web UI version implements the vast majority of stretch goals defined for the project.
 
