@@ -14,7 +14,7 @@ While the terminal version is very basic, implementing only core project require
 #### First, the user needs to enter at least one city name (i.e., 'location').
 The user can perform this by either choosing the '**My cities**' option on the sidebar or via the '**Manage stored locations**' from the '**Settings**' menu on the sidebar (details below).   
 In both cases, the user can add multiple locations for continuous monitoring.    
-Up-to-date weather reports for any stored locations are available once added.
+Once added, up-to-date weather reports for any stored locations are always available with the '**My cities**' option on the sidebar
 
 #### The user can configure his preferences with the sidebar's '**Settings**' option.    
 Available options in this menu currently include:
