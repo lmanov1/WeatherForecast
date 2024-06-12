@@ -44,7 +44,7 @@ In addition, the application's Streamlit version provides an ability to remove a
 
 ## Live Demo
 
-It is possible to access a live demo of the application [Streamlit app here](https://weatherforecast-guhya2ufeugzbk9fugn6y6.streamlit.app/ "Weather Watchdog")
+It is possible to access an online live demo of the application [Streamlit app here](https://weatherforecast-guhya2ufeugzbk9fugn6y6.streamlit.app/ "Weather Watchdog")
 
 *Best seen with a dark browser theme*
 
