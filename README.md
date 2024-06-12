@@ -22,7 +22,7 @@ Available options in this menu currently include:
 * Managing stored locations (Add/remove multiple locations)   
 * Updating local timezone. This allows Streamlit to correctly display user's local time😊
 
-#### The user can monitor weather conditions in stored locations by choosing the '**My cities**' option from the sidebar.
+
 
 ### Console Python version
 To start using the application, the user will be prompted to enter a valid OpenWeather API key, which will be encoded in base 64 and stored locally for subsequent use.
@@ -50,4 +50,12 @@ It is possible to access a live demo of the application [Streamlit app here](htt
     git clone git@github.com:lmanov1/WeatherForecast.git
     cd WeatherForecast
     poetry shell
-    python3 main.py
+```
+Running terminal version locally
+```bash
+    python3 ./main.py
+
+```
+Running streamlit version locally
+```bash
+    streamlit run ./streamlit_app.py
