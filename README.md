@@ -38,7 +38,9 @@ In addition, the application's Streamlit version provides relevant graphics and 
 
 ## User Locations Preferences
 
-Any location the user enters is stored as a preference for future use. The next time the user runs the application, he or she will be presented with the current weather conditions in all the stored locations.
+Any location the user enters is stored as a preference for future use.  
+Both versions allow to add multiple locations. The next time the user runs the application, he or she will be presented with the current weather conditions in all the stored locations.   
+In addition, the application's Streamlit version provides an ability to remove any of the stored locations.  
 
 ## Live Demo
 
