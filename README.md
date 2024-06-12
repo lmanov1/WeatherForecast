@@ -25,7 +25,7 @@ Available options in this menu currently include:
     
 ### Terminal version 
 
-To start using the application, the user will be prompted to enter a valid OpenWeather API key, which will be encoded in base 64 and stored locally for subsequent use.
+To start using the application, the user will be prompted to enter a valid OpenWeather API key. This is only required once.
 Next, the user will be prompted to enter a city name on the console. Current weather conditions at the destination are printed right away, and the location will be stored persistently as a preference for future use. 
 
 Each time the user starts anew, he or she will be presented with the current weather in all the previously stored locations, and a prompt to enter any additional location - or quit the application. 
