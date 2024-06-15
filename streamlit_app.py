@@ -28,13 +28,13 @@ def st_print_location(location, api_key):
         st.write(weather.popitem()[1])
         return
     if location in locations.keys():  
-        container = st.container( height=400, border=True)
+        container = st.container( height=480, border=True)
         with container:
             cols = st.columns(2,gap="medium")
             with cols[0]:                          
                 weather['Country'] = locations[location]['country']
                 weather_image = weather['Image']            
-                st.image(f"https://openweathermap.org/img/wn/{weather_image}@2x.png", width=70 )
+                st.image(f"https://openweathermap.org/img/wn/{weather_image}@2x.png", width=60 )
                 weather.pop('Image') # no more need
                 
                 df = pd.DataFrame(weather.items(), columns=[location.title(),''])
@@ -47,13 +47,19 @@ def st_print_location(location, api_key):
                 st.markdown(hide_table_row_index, unsafe_allow_html=True)
                 st.table(df)
             with cols[1]:
+                
                 curr_coord = dict(locations[location])
                 map_data = pd.DataFrame({
                         'latitude': [curr_coord['lat']],
                         'longitude': [curr_coord['lon']]
                     })
-                ## Create a map with the data
-                st.map(map_data, size=300, color='#0044ff',zoom = 10)
+                map_container = st.container(height=450,border=False)
+                with map_container:
+                    ## Create a map with the data
+                    st.map(map_data, size=300, color='#0044ff',zoom = 10)                
+                
+                   
+                
 
 def weather_at_city():
     """
@@ -82,7 +88,7 @@ def get_and_process_city_name():
 
 def st_api_key():
     """
-    Reads the API key from the streamlite's secrets store and returns it.
+    Reads the API key from the streamlite's secrets store and returns it to a calling function.
 
     Returns:
         str: The API key.
@@ -133,7 +139,7 @@ def checkbox_container(data):
 
 def get_selected_checkboxes():
     """
-    Gets the selected checkboxes.
+    Gets the currently selected checkboxes in checkboxes container
 
     Returns:
         list: List of selected checkboxes.
@@ -212,18 +218,17 @@ def process_settings():
     if "selected_option" not in st.session_state:
         st.session_state.selected_option = configuration_options[0]
 
-    hor_line = '⎯'*30
+    hor_line = '⎯'*30 # separator line
     st.selectbox(
         f'{hor_line} **Select one of the following** {hor_line}',
         configuration_options,
-        key='selected_option', on_change=process_selection(),
-        #index=0,
+        key='selected_option', on_change=process_selection(),       
         placeholder="Select a settings option...",
     )
 
 def main():
     """
-    Main function to run the Weather Forecast application.
+    Main function to run the Sreamlit-based Weather Watchdog application.
 
     Returns:
         None

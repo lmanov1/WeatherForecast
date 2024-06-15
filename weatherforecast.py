@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import requests
 import json
 from datetime import datetime , timedelta
@@ -7,7 +8,8 @@ import sys
 import tomlkit
 from pathlib import Path
 import base64
-
+# This file contains a set of basic functions for reading and writing the configuration file, storing the locations, and retrieving the OpenWeatherMap API key.
+# The functions are used by the main script to manage the configuration settings and access the weather data by both streamlit and teminal applications.
 ############################### Global definitions ####################################
 conf_file_name = "./.streamlit/conf.toml"
 exclude_list = ["id"]
@@ -62,6 +64,7 @@ weather_replace_descriptions =  [
     'Feels like' , 'Low' , 'High' , 'Pressure' , 'Humidity'
     ]
 
+############################### Persistent settings  ####################################
 def read_locations():
     """
     Reads the locations from the 'settings.json' file and returns them as a list.
@@ -105,7 +108,7 @@ def print_locations():
     print(f"=========== Locations settings \n {json.dumps(locations, indent=4)} ")
 
 
-###############################   Persistent settings  ####################################
+############################### Configuration file  ####################################
 def encode_string(string):
     """
     Encodes a string using base64 encoding.
@@ -274,7 +277,7 @@ def parse_openweather_response(json_str):
         temperature, humidity, wind speed, etc.
         The global `locations` dictionary is also updated with the city's information, including its coordinates, timezone, and units.
     '''
-    data = json.loads(json_str)
+    data = json.loads(json_str) 
     city = data["name"]
     if city not in locations.keys():
         locations[city.lower()] = {}
@@ -323,7 +326,7 @@ def parse_openweather_response(json_str):
             local_time_at_dest = datetime.utcfromtimestamp(data["dt"]) + timedelta(seconds=data["timezone"])
             dt_at_dest_str = local_time_at_dest.strftime("%A, %B %d, %Y, %I:%M %p")
             formatted_remote_offset_hours = "{:+}".format(data["timezone"]/(60*60))
-            final_weather["Time at destination"] = f"{dt_at_dest_str} UTC{formatted_remote_offset_hours}"
+            final_weather["Local time "] = f"{dt_at_dest_str} UTC{formatted_remote_offset_hours}"
 
     return final_weather
 
